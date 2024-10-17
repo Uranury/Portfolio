@@ -169,7 +169,7 @@ func main() {
 
 			fmt.Println("Tasks:")
 			for _, task := range tasks {
-				fmt.Printf("ID: %s, Description: %s, Status: %s", task.ID, task.Description, task.Status)
+				fmt.Printf("ID: %s, Description: %s, Status: %s\n", task.ID, task.Description, task.Status)
 			}
 		},
 	}
