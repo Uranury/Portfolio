@@ -227,7 +227,7 @@ func main() {
 
 			for idx, task := range tasks {
 				if task.ID == id {
-					tasks[idx].Status = "done"
+					tasks[idx].Status = Done
 					taskFound = true
 					fmt.Println("Task marked as done successfully.")
 					break
@@ -261,7 +261,7 @@ func main() {
 
 			for idx, task := range tasks {
 				if task.ID == id {
-					tasks[idx].Status = "in-progress"
+					tasks[idx].Status = InProgress
 					taskFound = true
 					fmt.Println("Task marked as in-progress successfully.")
 					break
