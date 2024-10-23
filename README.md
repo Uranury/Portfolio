@@ -50,11 +50,11 @@ To run any of the projects, follow these steps:
 
 1. Clone the repository: 
    ```bash
-   git clone https://github.com/your-username/your-portfolio.git
+   git clone https://github.com/Uranury/Portfolio.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd your-project-directory
+   cd project-directory
    ```
 3. Run the Go application:
    ```bash
