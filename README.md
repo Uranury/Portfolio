@@ -8,10 +8,11 @@ I'm passionate about mastering Go for backend development. My learning journey i
 
 - Building REST APIs
 - Working with databases (SQLite, PostgreSQL)
-- Developing CLI applications using Cobra
+- Developing CLI applications
 - Structuring Go projects
 - Error handling, testing, and optimization
 - Exploring key concepts of Go
+- Delving into microservices
 
 ## Projects
 
