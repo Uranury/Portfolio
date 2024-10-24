@@ -11,7 +11,8 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	DB, err := gorm.Open(sqlite.Open("api.db"))
+	var err error
+	DB, err = gorm.Open(sqlite.Open("api.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("couldn't connect to database: %v", err)
 	}
@@ -20,7 +21,6 @@ func InitDB() {
 	if err != nil {
 		log.Fatalf("failed to migrate database: %v", err)
 	}
-
 }
 
 func CloseDB() {

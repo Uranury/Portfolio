@@ -1,6 +1,7 @@
 package main
 
 import (
+	"REST-API/db"
 	"REST-API/handlers"
 	"log"
 	"net/http"
@@ -9,12 +10,15 @@ import (
 )
 
 func main() {
+	db.InitDB()
+	defer db.CloseDB()
+
 	router := mux.NewRouter()
 	router.HandleFunc("/departments", handlers.GetDepartments).Methods("GET")
 	router.HandleFunc("/departments/{id}", handlers.GetDepartment).Methods("GET")
 	router.HandleFunc("/departments", handlers.CreateDepartment).Methods("POST")
 	router.HandleFunc("/departments/{id}", handlers.DeleteDepartment).Methods("DELETE")
-	router.HandleFunc("/departments/{id}/employees", handlers.GetEmployeesByDepartment).Methods("GET")
+	// router.HandleFunc("/departments/{id}/employees", handlers.GetEmployeesByDepartment).Methods("GET")
 
 	router.HandleFunc("/employees/{id}", handlers.GetEmployee).Methods("GET")
 	router.HandleFunc("/employees", handlers.GetEmployees).Methods("GET")
