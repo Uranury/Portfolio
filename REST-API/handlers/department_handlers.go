@@ -83,6 +83,20 @@ func DeleteDepartment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check for employees associated with the department
+	var employeeCount int64
+	if err := db.DB.Model(&models.Employee{}).Where("department_id = ?", department.Code).Count(&employeeCount).Error; err != nil {
+		log.Printf("Error checking employees: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// If employees exist, return an error
+	if employeeCount > 0 {
+		http.Error(w, "cannot delete department: employees still associated", http.StatusConflict)
+		return
+	}
+
 	if err := db.DB.Delete(&department, "code = ?", departmentCode).Error; err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
