@@ -17,10 +17,11 @@ func GetEmployees(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var employees []models.Employee
 
-	if err := db.DB.Find(&employees).Error; err != nil {
+	if err := db.DB.Preload("Department").Find(&employees).Error; err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	json.NewEncoder(w).Encode(employees)
 }
 
@@ -52,10 +53,18 @@ func CreateEmployee(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "invalid input", http.StatusBadRequest)
 		return
 	}
+	// Save employee in the databse
 	if err := db.DB.Create(&employee).Error; err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	// Load the associated Department record
+	if err := db.DB.Preload("Department").First(&employee, employee.SSN).Error; err != nil {
+		http.Error(w, "failed to load department", http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(employee)
 }

@@ -6,7 +6,7 @@ type Employee struct {
 	LastName     string `gorm:"not null"`
 	DepartmentID int    `gorm:"not null"` // use 'DepartmentID' for clarity
 	City         string
-	Department   Department `gorm:"foreignKey:DepartmentID"` // Establishes foreign key relationship
+	Department   Department `gorm:"foreignKey:DepartmentID;references:Code"` // Establishes foreign key relationship
 }
 
 type Department struct {

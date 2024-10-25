@@ -90,11 +90,53 @@ func DeleteDepartment(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-/*
 func GetEmployeesByDepartment(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+
+	// Extracting department ID from the URL parameters
+	params := mux.Vars(r)
+	departmentID, err := strconv.Atoi(params["id"])
+	if err != nil {
+		http.Error(w, "invalid department code", http.StatusBadRequest)
+		return
+	}
+
+	// Check if the department exists
+	var department models.Department
+	if err := db.DB.First(&department, "code = ?", departmentID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			http.Error(w, "department not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Query for employees in the specified department
+	var employees []struct {
+		SSN      int    `json:"ssn"`
+		Name     string `json:"name"`
+		LastName string `json:"last_name"`
+	}
+
+	if err := db.DB.Model(&models.Employee{}).
+		Joins("JOIN departments ON employees.department_id = departments.code").
+		Where("departments.code = ?", departmentID).
+		Select("employees.ssn, employees.name, employees.last_name").
+		Find(&employees).Error; err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// Check if any employees were found
+	if len(employees) == 0 {
+		http.Error(w, "no employees found for the specified department", http.StatusNotFound)
+		return
+	}
+
+	// Encode the employee data as JSON and send the response
+	json.NewEncoder(w).Encode(employees)
 }
-*/
 
 func GetTotalBudget(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
